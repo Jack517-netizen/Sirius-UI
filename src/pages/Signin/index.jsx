@@ -6,7 +6,7 @@ import colors from './../../utils/style/colors'
 import facebook from './../../assets/facebook.png'
 import google from './../../assets/google.png'
 import git from './../../assets/git.png'
-// import logo from './../../assets/notification.png'
+import logo from './../../assets/sirius.png'
 
 const Return = styled(Link)`
   i {
@@ -232,7 +232,7 @@ function Sign() {
       <Container>
         <Inscription>
           <Title>
-            {/* <img src={logo} alt="logo-sirius" /> */}
+            <img src={logo} alt="logo-sirius" />
             <h1>Connexion</h1>
           </Title>
 

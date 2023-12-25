@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import styled from 'styled-components'
-// import logo from './../../assets/sirius.png'
+// import logo from './../../assets/notification.png'
 import live from './../../assets/live.png'
 import video from './../../assets/video.png'
 import message from './../../assets/message.png'

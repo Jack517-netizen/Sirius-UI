@@ -1,6 +1,16 @@
+// let localStream = null
 let remoteStream = null
 let roomId = null
-let peerConnection = null // PeerConnection
+let peerConnection = null
+
+// const openUserMedia = async (e) => {
+//   const stream = await navigator.mediaDevices.getUserMedia({
+//     audio: true,
+//     video: true,
+//   })
+//   document.querySelector('#localVideo').srcObject = stream
+//   localStream = stream
+// }
 
 /** Disconnect and Quit the Meeting Room */
 const hangUp = () => {

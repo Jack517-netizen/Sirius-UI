@@ -3,7 +3,6 @@ import Popup from 'reactjs-popup'
 import 'reactjs-popup/dist/index.css'
 import Header from '../../components/Header'
 import styled from 'styled-components'
-import video from './../../assets/video.mp4'
 import request from './../../assets/social.svg'
 import colors from '../../utils/style/colors'
 
@@ -18,6 +17,14 @@ const WaitingRoom = styled.div`
     padding: 25px;
   }
   .col-1 video {
+    width: 100%%;
+    height: 400px;
+    border-radius: 25px;
+    margin: 10px;
+    border: 1px solid ${colors.lightGray};
+  }
+  .col-1 div {
+    background: #555;
     width: 100%%;
     height: 400px;
     border-radius: 25px;
@@ -127,18 +134,54 @@ const AroniaModal = styled.div`
     box-shadow: 1px 2px 1px ${colors.lightGray};
   }
 `
+const openUserMedia = async (e) => {
+  navigator.mediaDevices.getUserMedia({audio: true, video: true}).then((stream) => {
+    document.querySelector('#localVideo').srcObject = stream
+    return true
+  }).catch((error) => {
+    // Access denied or an error occurred
+    console.error("Erreur lors de l'accès  à la caméra et au microphone: ", error)
+
+    if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+      // The user denied access, handle accordingly
+      alert("Vous avez refusé l'accès à la caméra et au microphone.")
+    } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+      // No microphone or camera found, handle accordingly
+      alert('Aucun microphone ou caméra trouvé sur cet appareil')
+    } else {
+      // Handle other errors
+      alert("Erreur d'accès aux périphériques: " + error.message);
+    }
+    return false
+  })
+}
 
 function Wait() {
+  // eslint-disable-next-line no-unused-vars
   const [flag, setFlag] = useState(true)
+  const [_granted, setGranted] = useState(false)
 
   useEffect(() => {
     const source = document.querySelector('.source')
     flag === true && source.click()
   }, [flag])
 
+  const _authorize = () => {
+    const tmp = openUserMedia()
+    if(tmp === true){
+      setGranted(true)
+    }else{
+      setGranted(false)
+    }
+  };
+
+  const _decline = () => {
+    alert('declining...')
+  }
+
   return (
     <React.Fragment>
-      <PopupStyle
+      {!_granted && (<PopupStyle
         trigger={
           <input
             className="source"
@@ -168,24 +211,34 @@ function Wait() {
               <br />
             </div>
             <div className="arn-actions">
-              <button onClick={(e) => console.log(e)} className="arn-access">
+              <button onClick={_authorize} className="arn-access">
                 Autoriser l'accès au micro et à la caméra
               </button>
-              <button onClick={() => close()}>
+              <button onClick={_decline}>
                 Continuer sans micro ni caméra
               </button>
             </div>
           </AroniaModal>
         )}
-      </PopupStyle>
+      </PopupStyle>)}
 
       <Header />
       <WaitingRoom>
         <div className="col-1">
-          <video src={video} muted="true" autoplay="true" loop="true"></video>
+          {_granted ? (
+            <video id="localVideo" autoPlay playsInline></video>
+          ) : (
+            <div></div>
+          )}
           <div className="controls">
-            <VideoControl className="bi bi-mic-mute"></VideoControl>
-            <VideoControl className="bi bi-camera-video-off"></VideoControl>
+            {_granted === true ? (<React.Fragment>
+              <VideoControl className="bi bi-mic"></VideoControl>
+              <VideoControl className="bi bi-camera-video"></VideoControl>
+            </React.Fragment>) :
+            (<React.Fragment>
+              <VideoControl className="bi bi-mic-mute"></VideoControl>
+              <VideoControl className="bi bi-camera-video-off"></VideoControl>
+            </React.Fragment>)}
           </div>
         </div>
         <div className="col-2">

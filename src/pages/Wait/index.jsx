@@ -135,25 +135,37 @@ const AroniaModal = styled.div`
   }
 `
 const openUserMedia = async (e) => {
-  navigator.mediaDevices.getUserMedia({audio: true, video: true}).then((stream) => {
-    document.querySelector('#localVideo').srcObject = stream
-    return true
-  }).catch((error) => {
-    // Access denied or an error occurred
-    console.error("Erreur lors de l'accès  à la caméra et au microphone: ", error)
+  navigator.mediaDevices
+    .getUserMedia({ audio: true, video: true })
+    .then((stream) => {
+      document.querySelector('#localVideo').srcObject = stream
+      return true
+    })
+    .catch((error) => {
+      // Access denied or an error occurred
+      console.error(
+        "Erreur lors de l'accès  à la caméra et au microphone: ",
+        error,
+      )
 
-    if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
-      // The user denied access, handle accordingly
-      alert("Vous avez refusé l'accès à la caméra et au microphone.")
-    } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
-      // No microphone or camera found, handle accordingly
-      alert('Aucun microphone ou caméra trouvé sur cet appareil')
-    } else {
-      // Handle other errors
-      alert("Erreur d'accès aux périphériques: " + error.message);
-    }
-    return false
-  })
+      if (
+        error.name === 'NotAllowedError' ||
+        error.name === 'PermissionDeniedError'
+      ) {
+        // The user denied access, handle accordingly
+        alert("Vous avez refusé l'accès à la caméra et au microphone.")
+      } else if (
+        error.name === 'NotFoundError' ||
+        error.name === 'DevicesNotFoundError'
+      ) {
+        // No microphone or camera found, handle accordingly
+        alert('Aucun microphone ou caméra trouvé sur cet appareil')
+      } else {
+        // Handle other errors
+        alert("Erreur d'accès aux périphériques: " + error.message)
+      }
+      return false
+    })
 }
 
 function Wait() {
@@ -168,12 +180,12 @@ function Wait() {
 
   const _authorize = () => {
     const tmp = openUserMedia()
-    if(tmp === true){
+    if (tmp === true) {
       setGranted(true)
-    }else{
+    } else {
       setGranted(false)
     }
-  };
+  }
 
   const _decline = () => {
     alert('declining...')
@@ -181,46 +193,49 @@ function Wait() {
 
   return (
     <React.Fragment>
-      {!_granted && (<PopupStyle
-        trigger={
-          <input
-            className="source"
-            type="hidden"
-            value="We are going to open pop-up for request access
+      {!_granted && (
+        <PopupStyle
+          trigger={
+            <input
+              className="source"
+              type="hidden"
+              value="We are going to open pop-up for request access
         to mic & camera"
-          />
-        }
-        modal
-        nested
-      >
-        {(close) => (
-          <AroniaModal className="arn-modal">
-            <div className="arn-content">
-              <img src={request} alt="svg used for illustrate" />
-              <br />
-              <br />
-              <h2>
-                Souhaitez-vous que les autres puissent vous voir et vous
-                entendre pendant la réunion ?
-              </h2>
-              <br />
-              <br />
-              <p>
-                Vous pouvez éteindre votre micro et votre caméra à tout moment.
-              </p>
-              <br />
-            </div>
-            <div className="arn-actions">
-              <button onClick={_authorize} className="arn-access">
-                Autoriser l'accès au micro et à la caméra
-              </button>
-              <button onClick={_decline}>
-                Continuer sans micro ni caméra
-              </button>
-            </div>
-          </AroniaModal>
-        )}
-      </PopupStyle>)}
+            />
+          }
+          modal
+          nested
+        >
+          {(close) => (
+            <AroniaModal className="arn-modal">
+              <div className="arn-content">
+                <img src={request} alt="svg used for illustrate" />
+                <br />
+                <br />
+                <h2>
+                  Souhaitez-vous que les autres puissent vous voir et vous
+                  entendre pendant la réunion ?
+                </h2>
+                <br />
+                <br />
+                <p>
+                  Vous pouvez éteindre votre micro et votre caméra à tout
+                  moment.
+                </p>
+                <br />
+              </div>
+              <div className="arn-actions">
+                <button onClick={_authorize} className="arn-access">
+                  Autoriser l'accès au micro et à la caméra
+                </button>
+                <button onClick={_decline}>
+                  Continuer sans micro ni caméra
+                </button>
+              </div>
+            </AroniaModal>
+          )}
+        </PopupStyle>
+      )}
 
       <Header />
       <WaitingRoom>
@@ -231,14 +246,17 @@ function Wait() {
             <div></div>
           )}
           <div className="controls">
-            {_granted === true ? (<React.Fragment>
-              <VideoControl className="bi bi-mic"></VideoControl>
-              <VideoControl className="bi bi-camera-video"></VideoControl>
-            </React.Fragment>) :
-            (<React.Fragment>
-              <VideoControl className="bi bi-mic-mute"></VideoControl>
-              <VideoControl className="bi bi-camera-video-off"></VideoControl>
-            </React.Fragment>)}
+            {_granted === true ? (
+              <React.Fragment>
+                <VideoControl className="bi bi-mic"></VideoControl>
+                <VideoControl className="bi bi-camera-video"></VideoControl>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <VideoControl className="bi bi-mic-mute"></VideoControl>
+                <VideoControl className="bi bi-camera-video-off"></VideoControl>
+              </React.Fragment>
+            )}
           </div>
         </div>
         <div className="col-2">

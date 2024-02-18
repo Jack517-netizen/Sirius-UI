@@ -6,16 +6,16 @@ import colors from './../../utils/style/colors'
 import facebook from './../../assets/facebook.png'
 import google from './../../assets/google.png'
 import git from './../../assets/git.png'
-import logo from './../../assets/sirius.png'
 
 const Return = styled(Link)`
-  i {
-    font-size: 2rem;
+  span {
+    display: block;
+    margin-top: 1rem;
     margin-left: 4rem;
-    color: ${colors.confirmColor};
+    color: ${colors.blackColor};
   }
 
-  i:hover {
+  span:hover {
     color: ${colors.primaryColor};
   }
 `
@@ -38,21 +38,22 @@ const Title = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-bottom: 2rem;
 
   img {
     width: 50px;
     height: 40px;
   }
 
-  h1 {
+  h1{
     font-weight: bold;
+    text-align: center;
+    margin-bottom: 1.3em;
   }
 `
 const Form = styled.div`
   position: relative;
   height: 50px;
-  margin-bottom: 1.4rem;
+  margin-bottom: 1.1rem;
 
   input {
     position: absolute;
@@ -220,20 +221,38 @@ function Sign() {
 
   const onSubmit = (data) => {
     console.log(data)
+
+    fetch('https://sirius-backend.onrender.com/api/auth/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        console.log(response)
+        if (response.ok) {
+          window.location = '/?signed=true'
+        } else {
+          alert('Erreur lors de la requête POST')
+        }
+      })
+      .catch((error) => {
+        alert('Erreur lors de la requête POST:', error)
+      })
   }
 
   return (
     <>
       <Return>
         <Link to="/">
-          <i className="bi bi-arrow-left"></i>
+          <span>Retour à l'accueil</span>
         </Link>
       </Return>
       <Container>
         <Inscription>
           <Title>
-            <img src={logo} alt="logo-sirius" />
-            <h1>Connexion</h1>
+            <h1>Créer Un Compte Sirius</h1>
           </Title>
 
           <form action="#" method="post" onSubmit={handleSubmit(onSubmit)}>
@@ -241,7 +260,7 @@ function Sign() {
               <input
                 type="text"
                 id="nom"
-                {...register('name', { required: true })}
+                {...register('username', { required: true })}
                 placeholder=""
               />
               {errors.name && <p>Veuillez renseignez votre nom</p>}
@@ -269,7 +288,7 @@ function Sign() {
                 type="password"
                 id="pass"
                 placeholder=""
-                {...register('pass', { required: true })}
+                {...register('password', { required: true })}
                 onChange={(e) => {
                   checkPassword(e.target.value)
                 }}
@@ -286,7 +305,7 @@ function Sign() {
                 type="password"
                 id="pass2"
                 placeholder=""
-                {...register('pass2', { required: true })}
+                {...register('password-confirm', { required: true })}
                 onChange={(e) => {
                   checkPassword(e.target.value)
                 }}
@@ -297,7 +316,7 @@ function Sign() {
             </Form>
 
             <Politics>
-              <input type="checkbox" name="politique" id="politique" />
+              <input type="checkbox" name="privacy-checked" id="politique" />
               <label htmlFor="politique">
                 Accepter les politiques de confidentialités
               </label>

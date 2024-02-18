@@ -8,12 +8,14 @@ import git from './../../assets/git.png'
 import React from 'react'
 
 const Return = styled(Link)`
-  i {
-    font-size: 2rem;
+  span {
+    display: block;
+    margin-top: 1rem;
     margin-left: 4rem;
-    color: ${colors.confirmColor};
+    color: ${colors.blackColor};
   }
-  i:hover {
+
+  span:hover {
     color: ${colors.primaryColor};
   }
 `
@@ -25,7 +27,7 @@ const Container = styled.div`
   height: 80vh;
 `
 const Connexion = styled.div`
-  width: 450px;
+  width: 470px;
   padding: 4rem 2rem;
   border-radius: 1rem;
   box-shadow: 0 0 25px ${colors.lightGray};
@@ -33,7 +35,7 @@ const Connexion = styled.div`
 const Title = styled.h1`
   font-weight: bold;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.3em;
 `
 const Form = styled.div`
   position: relative;
@@ -129,7 +131,13 @@ const Form = styled.div`
 const ActionStyle = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
+
+  label{
+    display: inline-block;
+    font-size: 0.78rem;
+    margin-left: 12px;
+  }
 
   div {
     font-size: 0.8rem;
@@ -141,12 +149,13 @@ const ActionStyle = styled.div`
   }
 `
 const Small = styled.small`
-  display: flex;
+  display: block;
   margin-top: 1rem;
   font-size: 0.78rem;
   width: 100%;
   justify-content: center;
   margin-bottom: 1rem;
+  margin-left: 3px;
 `
 const Anchor = styled(Link)`
   cursor: pointer;
@@ -192,16 +201,39 @@ function Login() {
 
   const onSubmit = (data) => {
     console.log(data)
+
+    fetch('https://sirius-backend.onrender.com/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        console.log(response)
+        if (response.ok) {
+          window.location = '/?logged=true'
+        } else {
+          alert('Erreur lors de la requête POST')
+        }
+      })
+      .catch((error) => {
+        console.error('Erreur lors de la requête POST:', error)
+      })
   }
 
   return (
     <React.Fragment>
       <Return>
-        <i className="bi bi-left-arrow"></i>
+        <Link to="/">
+          <span>Retour à l'accueil</span>
+        </Link>
       </Return>
       <Container>
         <Connexion>
-          <Title>Connexion</Title>
+          <Title>
+            Connectez-vous à votre compte
+          </Title>
 
           <form action="#" method="post" onSubmit={handleSubmit(onSubmit)}>
             <Form>
@@ -209,7 +241,7 @@ function Login() {
                 type="text"
                 id="username"
                 placeholder=""
-                {...register('name', { required: true })}
+                {...register('username', { required: true })}
               />
               {errors.name && <p>Veuillez renseignez votre nom</p>}
               <label htmlFor="username">Nom d'utilisateur</label>
@@ -221,7 +253,7 @@ function Login() {
                 type="password"
                 id="password"
                 placeholder=""
-                {...register('pass', { required: true })}
+                {...register('password', { required: true })}
               />
               <label htmlFor="password">Mot de passe</label>
               {errors.pass && <p>Veuillez renseignez un mot de passe</p>}
@@ -230,12 +262,12 @@ function Login() {
 
             <ActionStyle>
               <div>
-                <input type="checkbox" id="rappel" />
+                <input type="checkbox" id="rappel" name="remember-me"/>
                 &nbsp;&nbsp;
                 <label htmlFor="rappel">Se souvenir de moi</label>
               </div>
               <small>
-                <Anchor to="/recover">
+                <Anchor to="/recover-password">
                   <span>Mot de passe oublié ?</span>
                 </Anchor>
               </small>

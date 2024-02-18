@@ -234,8 +234,9 @@ function Login() {
     setPicture(response.picture.data.url)
     if (response.accessToken) {
       setLogin(true)
+      //? Use previous onSubmit function
       // eslint-disable-next-line no-template-curly-in-string
-      window.location = '/?logged-from-facebook=true&name=${data.name}&email=${data.email}&picture=${picture}'
+      window.location = `/?logged-from-facebook=true&name=${data.name}&email=${data.email}&picture=${picture}`
     } else {
       setLogin(false)
       window.location = '#error-happened'
@@ -308,7 +309,7 @@ function Login() {
             <LogoStyle>
             <FacebookLogin
               appId="960459798356803"
-              autoLoad={true}
+              autoLoad={false}
               fields="name,email,picture"
               scope="public_profile,user_friends"
               callback={responseFacebook}
@@ -319,7 +320,6 @@ function Login() {
                   onClick={renderProps.onClick}
                   disabled={renderProps.isDisabled}
                 >
-                  {/* Add your rounded Facebook logo here */}
                   <img
                     src={facebook}
                     alt="Facebook Logo"

@@ -1,9 +1,10 @@
 import styled from 'styled-components'
-import { useState } from 'react'
+import React, { useState } from 'react'
+import FacebookLogin from 'react-facebook-login'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import colors from './../../utils/style/colors'
-import facebook from './../../assets/facebook.png'
+// import facebook from './../../assets/facebook.png'
 import google from './../../assets/google.png'
 import git from './../../assets/git.png'
 
@@ -242,6 +243,23 @@ function Sign() {
       })
   }
 
+  const [login, setLogin] = useState(false)
+  const [data, setData] = useState({})
+  const [picture, setPicture] = useState('')
+
+  const responseFacebook = (response) => {
+    console.log(response)
+    setData(response)
+    setPicture(response.picture.data.url)
+    if (response.accessToken) {
+      setLogin(true)
+      window.location = '/?logged-from-facebook=true&name=${data.name}&email=${data.email}&picture=${picture}'
+    } else {
+      setLogin(false)
+      window.location = '#error-happened'
+    }
+  }
+
   return (
     <>
       <Return>
@@ -335,9 +353,16 @@ function Sign() {
           <SocialConnect>
             <h5>Ou continuer avec</h5>&nbsp;&nbsp;
             <LogoStyle>
-              <Link to="/facebook">
+              {/* <Link to="/facebook">
                 <img src={facebook} alt="logo-windows" />
-              </Link>
+              </Link> */}
+              <FacebookLogin
+              appId="960459798356803"
+              autoLoad={true}
+              fields="name,email,picture"
+              scope="public_profile,user_friends"
+              callback={responseFacebook}
+              icon="fa-facebook" />
             </LogoStyle>
             <LogoStyle>
               <Link to="/google">

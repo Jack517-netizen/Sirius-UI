@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars */
 import styled from 'styled-components'
 import React, { useState } from 'react'
 import FacebookLogin from 'react-facebook-login'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import colors from './../../utils/style/colors'
-// import facebook from './../../assets/facebook.png'
+import facebook from './../../assets/facebook.png'
 import google from './../../assets/google.png'
 import git from './../../assets/git.png'
 
@@ -253,6 +254,7 @@ function Sign() {
     setPicture(response.picture.data.url)
     if (response.accessToken) {
       setLogin(true)
+      // eslint-disable-next-line no-template-curly-in-string
       window.location = '/?logged-from-facebook=true&name=${data.name}&email=${data.email}&picture=${picture}'
     } else {
       setLogin(false)
@@ -353,16 +355,28 @@ function Sign() {
           <SocialConnect>
             <h5>Ou continuer avec</h5>&nbsp;&nbsp;
             <LogoStyle>
-              {/* <Link to="/facebook">
-                <img src={facebook} alt="logo-windows" />
-              </Link> */}
               <FacebookLogin
-              appId="960459798356803"
-              autoLoad={true}
-              fields="name,email,picture"
-              scope="public_profile,user_friends"
-              callback={responseFacebook}
-              icon="fa-facebook" />
+                appId="960459798356803"
+                autoLoad={true}
+                fields="name,email,picture"
+                scope="public_profile,user_friends"
+                callback={responseFacebook}
+                icon="fa-facebook"
+                render={(renderProps) => (
+                  <Button
+                    variant="primary"
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.isDisabled}
+                  >
+                    {/* Add your rounded Facebook logo here */}
+                    <img
+                      src={facebook}
+                      alt="Facebook Logo"
+                      style={{ marginRight: '10px', borderRadius: '50%' }}
+                    />
+                  </Button>
+                )}
+              />
             </LogoStyle>
             <LogoStyle>
               <Link to="/google">

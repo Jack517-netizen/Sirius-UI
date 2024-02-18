@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import colors from './../../utils/style/colors'
 import { useForm } from 'react-hook-form'
-// import facebook from './../../assets/facebook.png'
+import facebook from './../../assets/facebook.png'
 import google from './../../assets/google.png'
 import git from './../../assets/git.png'
 import React, { useState } from 'react'
@@ -233,6 +234,7 @@ function Login() {
     setPicture(response.picture.data.url)
     if (response.accessToken) {
       setLogin(true)
+      // eslint-disable-next-line no-template-curly-in-string
       window.location = '/?logged-from-facebook=true&name=${data.name}&email=${data.email}&picture=${picture}'
     } else {
       setLogin(false)
@@ -304,17 +306,29 @@ function Login() {
           <SocialConnect>
             <h5>Ou continuer avec</h5>
             <LogoStyle>
-              {/* <Link to="/facebook">
-                <img src={facebook} alt="logo-windows" />
-              </Link> */}
-              <FacebookLogin
+            <FacebookLogin
               appId="960459798356803"
               autoLoad={true}
               fields="name,email,picture"
               scope="public_profile,user_friends"
               callback={responseFacebook}
-              icon="fa-facebook" />
-            </LogoStyle>
+              icon="fa-facebook"
+              render={(renderProps) => (
+                <Button
+                  variant="primary"
+                  onClick={renderProps.onClick}
+                  disabled={renderProps.isDisabled}
+                >
+                  {/* Add your rounded Facebook logo here */}
+                  <img
+                    src={facebook}
+                    alt="Facebook Logo"
+                    style={{ marginRight: '10px', borderRadius: '50%' }}
+                  />
+                </Button>
+              )}
+            />
+          </LogoStyle>
             <LogoStyle>
               <Link to="/google">
                 <img src={google} alt="logo-gmail" />

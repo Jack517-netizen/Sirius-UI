@@ -24,7 +24,10 @@ import call from './../../assets/call.png'
 import mic from './../../assets/mic.png'
 import cast from './../../assets/cast.png'
 import initialize from './../../api/webrtc/functions'
+import handleReaction from './../../api/render/handle_reaction'
 import { useEffect } from 'react'
+import EmojiPicker from 'emoji-picker-react'
+import Popup from 'reactjs-popup'
 
 const RoomHeader = styled.div`
   width: 100%;
@@ -81,6 +84,7 @@ const RoomSubNav = styled.ul`
 const RoomContainer = styled.div`
   margin-left: 120px;
   padding: 0 2.5%;
+  position: relative;
   .top-icons {
     display: flex;
     align-items: center;
@@ -120,9 +124,17 @@ const RoomContainer = styled.div`
     justify-content: center;
   }
 
-  .controls img {
+  .controls img{
     width: 40px;
-    margin: 20px 10px;
+    margin: 10px 20px;
+    cursor: pointer;
+    transition: transform 0.5s;
+  }
+
+  .controls i{
+    padding: 5px;
+    font-size: 1.3em;
+    color: #fff;
     cursor: pointer;
     transition: transform 0.5s;
   }
@@ -131,7 +143,7 @@ const RoomContainer = styled.div`
     width: 70px;
   }
 
-  .controls img:hover {
+  .controls img:hover, .controls i:hover {
     transform: translateY(-10px);
   }
 
@@ -220,6 +232,9 @@ function Room() {
             ></video>
             <div className="controls">
               <img src={chat} className="control" />
+              <Popup contentStyle={{width: "auto", height: "auto", backgroundColor: "#00122e", border: "none"}} position="top center" trigger={<i className="bi bi-emoji-smile"></i>}>
+                <EmojiPicker reactionsDefaultOpen={true} onReactionClick={handleReaction}/>
+              </Popup>
               <img src={disconnect} className="control" />
               <img src={call} className="call-icon control" id="hangUp" />
               <img src={mic} className="control" />

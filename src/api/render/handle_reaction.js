@@ -16,6 +16,10 @@ const handleReaction = (emojiData) => {
   // send a message to the server
   socket.emit('reaction', JSON.stringify(payload))
 
+  socket.on('hello', (arg) => {
+    console.log(arg)
+  })
+
   // receive a message from the server
   socket.on('reaction', (arg) => {
     const payload = JSON.parse(arg)

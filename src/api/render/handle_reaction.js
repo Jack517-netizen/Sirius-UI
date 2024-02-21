@@ -22,7 +22,7 @@ const handleReaction = (emojiData) => {
 
   // receive a message from the server
   socket.on('reaction', (arg) => {
-    const payload = JSON.parse(arg)
+    const payload = arg
     console.log(payload)
     alert(payload['sender'] + ' --> ' + payload['emoji'])
   })

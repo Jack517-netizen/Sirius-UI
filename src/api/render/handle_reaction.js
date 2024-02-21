@@ -6,7 +6,7 @@ const handleReaction = (emojiData) => {
   const sender = 'JackJosue517'
   const payload = { sender, url, emoji }
 
-  const socket = io('http://sirius-backend.onrender.com')
+  const socket = io('https://sirius-backend.onrender.com')
 
   // send a message to the server
   socket.emit('reaction', JSON.stringify(payload))
